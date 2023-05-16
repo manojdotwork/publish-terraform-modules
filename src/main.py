@@ -40,6 +40,9 @@ def main(config: Config) -> str:
             Log.info(f"Module {module_name} already exists.")
 
         module = registry.get_module(module_name, config.provider)
+        
+        version_config=json.loads(os.path.join(module_folder, "version.json"))
+        Log.info(f"Version is "+version_config["data"]["attributes"]["version"])
 
         new_version = bump_module_version(
             module,
