@@ -32,6 +32,11 @@ def main(config: Config) -> str:
 
         Log.start_group(f"Module {module_name}")
 
+        f = open(os.path.join(module_folder, "version.json"))
+        version_config=json.load(f)
+        print("Version is "+version_config["data"]["attributes"]["version"])
+
+
         if not registry.module_exists(module_name, config.provider):
 
             Log.info("The module selected does not exists.")
@@ -40,15 +45,13 @@ def main(config: Config) -> str:
             Log.info(f"Module {module_name} already exists.")
 
         module = registry.get_module(module_name, config.provider)
-        
-        version_config=json.loads(os.path.join(module_folder, "version.json"))
-        Log.info(f"Version is "+version_config["data"]["attributes"]["version"])
 
-        new_version = bump_module_version(
-            module,
-            base_version,
-            config.autobump_version,
-        )
+        new_version = version_config["data"]["attributes"]["version"]
+        # new_version = bump_module_version(
+        #     module,
+        #     base_version,
+        #     config.autobump_version,
+        # )
 
         if module.has_version(new_version):
             Log.warning(f"Module version {new_version} already exists.")
